@@ -6,60 +6,28 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Поле поиска -->
-    <LinearLayout
+    <!-- Содержимое макета (поиск, кнопка, RecyclerView) -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingBottom="8dp">
+        android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/searchEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Поиск"
-            android:drawableStart="@drawable/ic_search"
-            android:padding="8dp"
-            android:background="@color/black" />
-
-        <ImageView
-            android:id="@+id/filterIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_filter"
-            android:contentDescription="Фильтр"
-            android:layout_marginStart="8dp" />
-    </LinearLayout>
-
-    <!-- Кнопка сортировки -->
     <Button
         android:id="@+id/sortButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Сортировать по дате публикации" />
+        android:layout_height="wrap_content" />
 
-    <!-- RecyclerView для списка курсов -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="8dp" />
-
-    <!-- Контейнер для фрагментов -->
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottomNavigationView"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" /> <!-- Занимает все доступное место -->
 
     <!-- Нижняя навигационная панель -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled" />
 

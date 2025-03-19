@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Callback
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var coursesRecyclerView: RecyclerView
-    private lateinit var sortButton: ImageView
+    private lateinit var sortButton: MaterialButton
     private lateinit var searchView: SearchView
 
     private val coursesAdapter by lazy {
@@ -43,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
         // Устанавливаем экран "Главная" по умолчанию
         if (savedInstanceState == null) {
-            replaceFragment(HomeFragment())
             bottomNavigationView.selectedItemId = R.id.nav_home
         }
 
@@ -88,7 +88,6 @@ class MainActivity : AppCompatActivity() {
                     coursesRecyclerView.visibility = View.VISIBLE
                     searchView.visibility = View.VISIBLE
                     sortButton.visibility = View.VISIBLE
-                    replaceFragment(HomeFragment())
                     true
                 }
                 R.id.nav_favorites -> {
@@ -96,7 +95,6 @@ class MainActivity : AppCompatActivity() {
                     coursesRecyclerView.visibility = View.GONE
                     searchView.visibility = View.GONE
                     sortButton.visibility = View.GONE
-                    replaceFragment(FavoritesFragment())
                     true
                 }
                 R.id.nav_account -> {
@@ -104,7 +102,6 @@ class MainActivity : AppCompatActivity() {
                     coursesRecyclerView.visibility = View.GONE
                     searchView.visibility = View.GONE
                     sortButton.visibility = View.GONE
-                    replaceFragment(AccountFragment())
                     true
                 }
                 else -> false
@@ -112,12 +109,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Метод для замены фрагментов
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
-            .commit()
-    }
 
     // Загрузка курсов с API
     private fun fetchCourses() {
