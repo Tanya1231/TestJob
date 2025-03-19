@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    package="com.example.testjob">
+
+    <!-- Разрешения (если нужно) -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -10,7 +13,23 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TestJob"
-        tools:targetApi="31" />
+        android:theme="@style/Theme.TestJob">
 
+        <!-- Экран онбординга -->
+        <activity android:name=".OnboardingActivity"
+            android:exported="true">
+            <intent-filter>
+                <!-- Указываем, что это первый экран приложения -->
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Экран авторизации -->
+        <activity android:name=".LoginActivity" />
+
+        <!-- Главная активность с BottomNavigationView -->
+        <activity android:name=".MainActivity" />
+
+    </application>
 </manifest>
