@@ -1,28 +1,18 @@
 package com.example.testjob
 
-import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-
-data class Course(
-    val id: Int,
-    val title: String,
-    val text: String,
-    val price: String,
-    val rate: Double,
-    val startDate: String,
-    val hasLike: Boolean,
-    val publishDate: String
-)
+import com.bumptech.glide.Glide
 
 class CoursesAdapter(
-    private val context: Context,
-    val courses: List<Course>,
+    private var courses: MutableList<Course>,
     private val onFavoriteToggle: (Course) -> Unit
 ) : RecyclerView.Adapter<CoursesAdapter.CourseViewHolder>() {
 
@@ -31,28 +21,42 @@ class CoursesAdapter(
         val descriptionTextView: TextView = view.findViewById(R.id.descriptionTextView)
         val priceTextView: TextView = view.findViewById(R.id.priceTextView)
         val rateTextView: TextView = view.findViewById(R.id.rateTextView)
+        val startDateTextView: TextView = view.findViewById(R.id.startDateTextView)
         val favoriteIcon: ImageView = view.findViewById(R.id.favoriteIcon)
+        val cardView: CardView = view.findViewById(R.id.courseCardView)
+        val courseImageView: ImageView = view.findViewById(R.id.courseImageView)
 
         fun bind(course: Course) {
             titleTextView.text = course.title
             descriptionTextView.text = course.text
             priceTextView.text = "Цена: ${course.price}"
             rateTextView.text = "Рейтинг: ${course.rate}"
+            startDateTextView.text = "Начало: ${course.startDate}"
 
-            // Обрезка описания до 2 строк
             descriptionTextView.maxLines = 2
             descriptionTextView.ellipsize = android.text.TextUtils.TruncateAt.END
 
-            // Установка цвета для избранного
-            if (course.hasLike) {
-                favoriteIcon.setColorFilter(Color.GREEN)
-            } else {
-                favoriteIcon.setColorFilter(Color.GRAY)
-            }
+            favoriteIcon.setColorFilter(if (course.hasLike) Color.GREEN else Color.GRAY)
 
-            // Обработка клика на иконку избранного
+            // Генерируем URL изображения на основе ID курса
+            val imageUrl = "https://placeimg.com/800/400/tech?${course.id}"
+
+            // Загружаем изображение с помощью Glide
+            Glide.with(itemView.context)
+                .load(imageUrl)
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.students)
+                .centerCrop()
+                .into(courseImageView)
+
             favoriteIcon.setOnClickListener {
                 onFavoriteToggle(course)
+                notifyItemChanged(adapterPosition)
+            }
+
+            cardView.setOnClickListener {
+                // Здесь можно добавить обработку нажатия на карточку курса
+                // Например, открытие детальной информации о курсе
             }
         }
     }
@@ -66,5 +70,14 @@ class CoursesAdapter(
         holder.bind(courses[position])
     }
 
-    override fun getItemCount(): Int = courses.size
+    override fun getItemCount(): Int {
+        return courses.size
+    }
+
+    fun updateData(newCourses: List<Course>) {
+        courses.clear()
+        courses.addAll(newCourses)
+        notifyDataSetChanged()
+    }
 }
+

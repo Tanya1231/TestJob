@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppButtonTextStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">328dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="cornerRadius">100px</item>
+        <item name="backgroundTint">@color/green</item>
+    </style>
+</resources>

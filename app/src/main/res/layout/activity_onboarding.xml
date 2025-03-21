@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
+
+    <View
+        android:layout_width="108dp"
+        android:layout_height="4dp"
+        android:layout_marginLeft="126dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/divider_line" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="Roboto"
+        android:letterSpacing="0"
+        android:lineHeight="36dp"
+        android:text="@string/heading"
+        android:textColor="#F2F2F3"
+        android:textSize="28sp"/>
+
 
     <ImageView
         android:id="@+id/onboardingImage"
@@ -14,7 +31,8 @@
 
     <Button
         android:id="@+id/continueButton"
+        style="@style/AppButtonTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Продолжить" />
+        android:text="@string/resume" />
 </LinearLayout>
