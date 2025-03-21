@@ -6,4 +6,9 @@
     <string name="resume">Продолжить</string>
     <string name="heading">Тысячи курсов \nв одном месте</string>
     <string name="image">картинка</string>
+    <string name="entrance">Вход</string>
+    <string name="email">Email</string>
+    <string name="passport">Пароль</string>
+    <string name="enter_the_password">Введите пароль</string>
+    <string name="example">example@gmail.com</string>
 </resources>

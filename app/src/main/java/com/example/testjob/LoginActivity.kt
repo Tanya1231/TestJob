@@ -2,11 +2,15 @@ package com.example.testjob
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -36,6 +40,24 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+
+        // Скрываем системную навигационную панель
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Для Android 11 (API 30) и выше
+            window.insetsController?.let {
+                it.hide(WindowInsets.Type.navigationBars())
+                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            // Для Android 10 (API 29) и ниже
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        }
 
         // Инициализируем AppPreferences
         appPreferences = AppPreferences(this)
@@ -62,8 +84,6 @@ class LoginActivity : AppCompatActivity() {
 
         // Находим кнопки
         try {
-            registerButton = findViewById(R.id.registerButton)
-            forgotPasswordButton = findViewById(R.id.forgotPasswordButton)
             vkButton = findViewById(R.id.vkButton)
             okButton = findViewById(R.id.okButton)
 

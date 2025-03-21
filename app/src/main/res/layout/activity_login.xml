@@ -1,70 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
-
-    <View
-        android:layout_width="108dp"
-        android:layout_height="4dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="126dp"
-        android:background="@drawable/divider_line" />
-
-
-    <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
-
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Пароль"
-        android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Вход"
-        style="@style/AppButtonTextStyle"
-        android:enabled="false" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="16dp">
-
-        <Button
-            android:id="@+id/registerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Регистрация"
-            android:enabled="false"
-            android:layout_marginEnd="8dp" />
-
-        <Button
-            android:id="@+id/forgotPasswordButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Забыл пароль"
-            android:enabled="false" />
-    </LinearLayout>
+    android:paddingHorizontal="16dp"
+    android:paddingTop="140dp"
+    android:paddingBottom="48dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Войти через социальные сети:"
+        android:layout_marginBottom="16dp"
+        android:gravity="left"
+        android:text="@string/entrance"
+        android:textSize="28sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="left"
+            android:text="@string/email"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/rounded_dark_input"
+            android:hint="@string/example"
+            android:inputType="textEmailAddress"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
+            android:textColorHint="#80FFFFFF" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="left"
+            android:text="@string/passport"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/rounded_dark_input"
+            android:hint="@string/enter_the_password"
+            android:inputType="textPassword"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
+            android:textColorHint="#80FFFFFF" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/loginButton"
+        style="@style/AppButtonTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:enabled="false"
+        android:text="Вход" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Нет аккаунта? "
+            android:lineHeight="15sp"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/registerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Регистрация"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/green"
+            android:lineHeight="15sp"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/forgotPasswordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Забыл пароль"
+        android:lineHeight="15sp"
+        android:textColor="@color/green"
+        android:textSize="12sp"
+        android:layout_marginBottom="25dp"/>
+
+
+    <View
+        android:layout_width="328dp"
+        android:layout_height="1dp"
+        android:background="#4D555E"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="16dp" />
 
     <LinearLayout
@@ -75,17 +140,28 @@
 
         <ImageButton
             android:id="@+id/vkButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_vk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:contentDescription="ВКонтакте"
-            android:layout_marginEnd="16dp" />
+            android:src="@drawable/ic_vk"
+            android:background="@android:color/transparent" />
 
         <ImageButton
             android:id="@+id/okButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Одноклассники"
             android:src="@drawable/ic_ok"
-            android:contentDescription="Одноклассники" />
+            android:background="@android:color/transparent" />
     </LinearLayout>
+
+    <View
+        android:layout_width="108dp"
+        android:layout_marginTop="100dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/divider_line" />
+
 </LinearLayout>

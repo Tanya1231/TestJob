@@ -8,5 +8,7 @@
         <item name="backgroundTint">@color/green</item>
         <item name="fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">@color/smoky_white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>
