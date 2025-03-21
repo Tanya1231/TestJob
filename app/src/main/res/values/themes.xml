@@ -1,8 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.TestJob" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@color/dark</item>
         <item name="android:statusBarColor">@color/dark</item>
         <item name="android:navigationBarColor">@color/dark</item>
+        <item name="android:textColor">@color/smoky_white</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
+
+    <!-- Тема для полноэкранного режима -->
+    <style name="Theme.TestJob.Fullscreen" parent="Theme.TestJob">
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
 </resources>

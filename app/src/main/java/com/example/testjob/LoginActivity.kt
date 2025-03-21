@@ -22,6 +22,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var forgotPasswordButton: Button
     private lateinit var vkButton: ImageButton
     private lateinit var okButton: ImageButton
+    private lateinit var appPreferences: AppPreferences
 
     // Объявляем TextWatcher, чтобы потом удалять его при уничтожении Activity
     private val textWatcher = object : TextWatcher {
@@ -35,6 +36,23 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Инициализируем AppPreferences
+        appPreferences = AppPreferences(this)
+
+        // Проверяем, нужно ли показывать онбординг
+        if (!appPreferences.isOnboardingCompleted()) {
+            startActivity(Intent(this, OnboardingActivity::class.java))
+            finish()
+            return
+        }
+
+        // Проверяем, вошел ли пользователь
+        if (appPreferences.isUserLoggedIn()) {
+            goToMainActivity()
+            return
+        }
+
         setContentView(R.layout.activity_login)
 
         // Инициализация полей
@@ -82,9 +100,8 @@ class LoginActivity : AppCompatActivity() {
 
         // Обработчик нажатия на кнопку входа
         loginButton.setOnClickListener {
-            // Сохранение состояния входа
-            val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
-            sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
+            // Сохраняем состояние входа
+            appPreferences.setUserLoggedIn()
 
             // Переход на главный экран
             goToMainActivity()
@@ -92,6 +109,30 @@ class LoginActivity : AppCompatActivity() {
 
         // Начальная проверка полей
         validateInput()
+    }
+
+    private fun checkOnboardingAndLogin() {
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val isOnboardingCompleted = sharedPreferences.getBoolean("onboarding_completed", false)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+
+        // Проверяем, есть ли в SharedPreferences запись об онбординге
+        // Если нет, значит это первый запуск или данные были очищены
+        if (!isOnboardingCompleted) {
+            // Если онбординг не пройден, показываем его
+            startActivity(Intent(this, OnboardingActivity::class.java))
+            finish()
+            return
+        }
+
+        // Если онбординг пройден, но пользователь не вошел, остаемся на экране логина
+        if (isLoggedIn) {
+            // Если пользователь уже вошел, сразу переходим на главный экран
+            goToMainActivity()
+            return
+        }
+
+        // В противном случае остаемся на экране логина
     }
 
     private fun validateInput() {
@@ -125,3 +166,4 @@ class LoginActivity : AppCompatActivity() {
         passwordEditText.removeTextChangedListener(textWatcher)
     }
 }
+

@@ -16,22 +16,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TestJob">
 
-        <!-- Экран онбординга -->
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
-                <!-- Указываем, что это первый экран приложения -->
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Экран авторизации -->
-        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".OnboardingActivity"
+            android:theme="@style/Theme.TestJob.Fullscreen" />
 
-        <!-- Главная активность с BottomNavigationView -->
-        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" />
 
     </application>
 </manifest>
