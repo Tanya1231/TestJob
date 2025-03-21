@@ -6,5 +6,7 @@
         <item name="android:padding">8dp</item>
         <item name="cornerRadius">100px</item>
         <item name="backgroundTint">@color/green</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/smoky_white</item>
     </style>
 </resources>

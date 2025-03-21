@@ -13,12 +13,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <View
-            android:layout_width="108dp"
-            android:layout_height="4dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="126dp"
-            android:background="@drawable/divider_line" />
 
         <ImageView
             android:id="@+id/courseImageView"

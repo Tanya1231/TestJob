@@ -3,36 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
-
-    <View
-        android:layout_width="108dp"
-        android:layout_height="4dp"
-        android:layout_marginLeft="126dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/divider_line" />
+    android:paddingHorizontal="16dp"
+    android:paddingTop="140dp"
+    android:paddingBottom="48dp"> <!-- Добавьте отступ снизу -->
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="Roboto"
+        android:gravity="center"
         android:letterSpacing="0"
-        android:lineHeight="36dp"
         android:text="@string/heading"
-        android:textColor="#F2F2F3"
-        android:textSize="28sp"/>
-
+        android:textSize="28sp" />
 
     <ImageView
         android:id="@+id/onboardingImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:adjustViewBounds="true"
         android:src="@drawable/onboarding" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/continueButton"
         style="@style/AppButtonTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/resume" />
+
+    <View
+        android:layout_width="108dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/divider_line" />
+
 </LinearLayout>
