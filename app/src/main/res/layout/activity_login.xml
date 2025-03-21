@@ -6,6 +6,14 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <View
+        android:layout_width="108dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="126dp"
+        android:background="@drawable/divider_line" />
+
+
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
@@ -25,5 +33,59 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Вход"
+        style="@style/AppButtonTextStyle"
         android:enabled="false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Регистрация"
+            android:enabled="false"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/forgotPasswordButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Забыл пароль"
+            android:enabled="false" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Войти через социальные сети:"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/vkButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_vk"
+            android:contentDescription="ВКонтакте"
+            android:layout_marginEnd="16dp" />
+
+        <ImageButton
+            android:id="@+id/okButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_ok"
+            android:contentDescription="Одноклассники" />
+    </LinearLayout>
 </LinearLayout>

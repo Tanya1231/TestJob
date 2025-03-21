@@ -2,68 +2,81 @@ package com.example.testjob
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
-import com.google.gson.Gson
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import java.io.IOException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var coursesRecyclerView: RecyclerView
     private lateinit var sortButton: MaterialButton
     private lateinit var searchView: SearchView
+    private lateinit var fragmentContainer: FrameLayout
 
     private val coursesAdapter by lazy {
-        CoursesAdapter(this, mutableListOf(), ::toggleFavorite)
+        CoursesAdapter(mutableListOf(), ::toggleFavorite)
     }
 
-    private val client = OkHttpClient()
     private var coursesList: List<Course> = listOf()
+    private lateinit var database: CourseDatabase
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Инициализация интерфейса
-        bottomNavigationView = findViewById(R.id.bottomNavigationView)
-        coursesRecyclerView = findViewById(R.id.recyclerView)
-        sortButton = findViewById(R.id.sortButton)
-        searchView = findViewById(R.id.searchEditText)
+        // Инициализация базы данных
+        database = CourseDatabase.getDatabase(this)
 
-        // Устанавливаем экран "Главная" по умолчанию
+        // Инициализация views
+        initViews()
+
         if (savedInstanceState == null) {
             bottomNavigationView.selectedItemId = R.id.nav_home
         }
 
-        // Настройка BottomNavigationView
         setupBottomNavigation()
+        setupRecyclerView()
+        setupListeners()
+        fetchCourses()
+    }
 
-        // Настройка RecyclerView
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineScope.cancel()
+    }
+
+    private fun initViews() {
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        coursesRecyclerView = findViewById(R.id.recyclerView)
+        sortButton = findViewById(R.id.sortButton)
+        searchView = findViewById(R.id.searchEditText)
+        fragmentContainer = findViewById(R.id.fragment_container)
+    }
+
+    private fun setupRecyclerView() {
         coursesRecyclerView.layoutManager = LinearLayoutManager(this)
         coursesRecyclerView.adapter = coursesAdapter
+    }
 
-        // Загрузка данных с API
-        fetchCourses()
-
-        // Обработчик сортировки
+    private fun setupListeners() {
         sortButton.setOnClickListener {
             coursesList = coursesList.sortedByDescending { it.publishDate }
             coursesAdapter.updateData(coursesList)
         }
 
-        // Обработчик поиска
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -79,65 +92,104 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    // Настройка BottomNavigationView
     private fun setupBottomNavigation() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    // Показать RecyclerView и скрыть fragmentContainer
+                    fragmentContainer.visibility = View.GONE
                     coursesRecyclerView.visibility = View.VISIBLE
                     searchView.visibility = View.VISIBLE
                     sortButton.visibility = View.VISIBLE
                     true
                 }
+
                 R.id.nav_favorites -> {
-                    // Показать фрагмент "Избранное" и скрыть RecyclerView
+                    fragmentContainer.visibility = View.VISIBLE
                     coursesRecyclerView.visibility = View.GONE
                     searchView.visibility = View.GONE
                     sortButton.visibility = View.GONE
+                    showFavorites()
                     true
                 }
+
                 R.id.nav_account -> {
-                    // Показать фрагмент "Аккаунт" и скрыть RecyclerView
+                    fragmentContainer.visibility = View.VISIBLE
                     coursesRecyclerView.visibility = View.GONE
                     searchView.visibility = View.GONE
                     sortButton.visibility = View.GONE
+                    showAccount()
                     true
                 }
+
                 else -> false
             }
         }
     }
 
-
-    // Загрузка курсов с API
     private fun fetchCourses() {
-        val request = Request.Builder()
-            .url("https://drive.usercontent.google.com/u/0/uc?id=15arTK7XT2b7Yv4BJsmDctA4Hg-BbS8-q&export=download")
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                response.body?.string()?.let { responseBody ->
-                    val coursesResponse = Gson().fromJson(responseBody, CoursesResponse::class.java)
-                    coursesList = coursesResponse.courses
-
-                    // Обновляем адаптер на главном потоке
+        RetrofitClient.courseApiService.getCourses()
+            .enqueue(object : retrofit2.Callback<CoursesResponse> {
+                override fun onFailure(call: retrofit2.Call<CoursesResponse>, t: Throwable) {
+                    t.printStackTrace()
                     runOnUiThread {
-                        coursesAdapter.updateData(coursesList)
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Ошибка загрузки курсов: ${t.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
-            }
-        })
+
+                override fun onResponse(
+                    call: retrofit2.Call<CoursesResponse>,
+                    response: retrofit2.Response<CoursesResponse>
+                ) {
+                    if (!response.isSuccessful) {
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Ошибка сервера: ${response.code()}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        return
+                    }
+
+                    response.body()?.let { coursesResponse ->
+                        try {
+                            val courses = coursesResponse.courses
+
+                            // Проверяем, какие курсы уже в избранном
+                            coroutineScope.launch {
+                                val updatedCourses = courses.map { course ->
+                                    val isFavorite = withContext(Dispatchers.IO) {
+                                        database.favoriteDao().isFavorite(course.id)
+                                    }
+                                    course.copy(hasLike = isFavorite)
+                                }
+
+                                coursesList = updatedCourses
+
+                                withContext(Dispatchers.Main) {
+                                    coursesAdapter.updateData(coursesList)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            runOnUiThread {
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Ошибка парсинга данных: ${e.message}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
+                }
+            })
     }
 
-    // Обновление избранного
     private fun toggleFavorite(course: Course) {
-        // Локальное обновление данных
         val updatedList = coursesList.toMutableList().map {
             if (it.id == course.id) {
                 it.copy(hasLike = !it.hasLike)
@@ -148,16 +200,53 @@ class MainActivity : AppCompatActivity() {
         coursesList = updatedList
         coursesAdapter.updateData(coursesList)
 
-        // TODO: Реализовать сохранение избранного в локальную базу данных
+        // Сохранение избранного в локальную базу данных
+        coroutineScope.launch {
+            try {
+                val isFavorite = withContext(Dispatchers.IO) {
+                    database.favoriteDao().isFavorite(course.id)
+                }
+
+                if (isFavorite) {
+                    // Удаляем из избранного
+                    withContext(Dispatchers.IO) {
+                        database.favoriteDao().delete(course.id)
+                    }
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Курс удален из избранного",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    // Добавляем в избранное
+                    withContext(Dispatchers.IO) {
+                        val favCourse = FavoriteCourse.fromCourse(course)
+                        database.favoriteDao().insert(favCourse)
+                    }
+
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Курс добавлен в избранное",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@MainActivity, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
-}
 
-// Модель ответа API
-data class CoursesResponse(val courses: List<Course>)
+    private fun showFavorites() {
+        val favoritesFragment = FavoritesFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, favoritesFragment)
+            .commit()
+    }
 
-// Расширение адаптера для обновления данных
-fun CoursesAdapter.updateData(newData: List<Course>) {
-    (this.courses as MutableList).clear()
-    this.courses.addAll(newData)
-    notifyDataSetChanged()
+    private fun showAccount() {
+        val accountFragment = AccountFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, accountFragment)
+            .commit()
+    }
 }
