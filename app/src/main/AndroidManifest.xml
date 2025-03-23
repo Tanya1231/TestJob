@@ -25,9 +25,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".OnboardingActivity"
-            android:theme="@style/Theme.TestJob.Fullscreen" />
+        <activity android:name=".OnboardingActivity" />
 
         <activity android:name=".LoginActivity" />
 

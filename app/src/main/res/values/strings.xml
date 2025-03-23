@@ -11,4 +11,13 @@
     <string name="passport">Пароль</string>
     <string name="enter_the_password">Введите пароль</string>
     <string name="example">example@gmail.com</string>
+    <string name="search_courses">Search courses...</string>
+    <string name="no_account">Нет аккаунта?</string>
+    <string name="registration">Регистрация</string>
+    <string name="forgot_my_password">Забыл пароль</string>
+    <string name="vk">ВКонтакте</string>
+    <string name="ok">Одноклассники</string>
+    <string name="date_added">По дате добавления</string>
+    <string name="no_courses">У вас пока нет избранных курсов</string>
+    <string name="more_detailed">Подробнее</string>
 </resources>

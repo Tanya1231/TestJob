@@ -41,7 +41,6 @@ class FavoritesFragment : Fragment() {
 
         favoritesRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Initialize adapter with the toggleFavorite method
         favoritesAdapter = FavoritesAdapter(mutableListOf(), ::toggleFavorite)
         favoritesRecyclerView.adapter = favoritesAdapter
 
@@ -69,7 +68,6 @@ class FavoritesFragment : Fragment() {
 
                 // Обновляем UI на главном потоке
                 withContext(Dispatchers.Main) {
-                    // Update adapter with favorites
                     favoritesAdapter.updateData(favorites)
 
                     // Показываем сообщение, если нет избранных курсов
@@ -93,7 +91,7 @@ class FavoritesFragment : Fragment() {
         }
     }
 
-    // Добавляем метод toggleFavorite, который будет использоваться в адаптере
+
     private fun toggleFavorite(course: Course) {
         coroutineScope.launch {
             try {

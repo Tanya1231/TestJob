@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class FavoritesAdapter(
     private var courses: MutableList<Course>,
@@ -21,19 +24,22 @@ class FavoritesAdapter(
         val rateTextView: TextView = view.findViewById(R.id.rateTextView)
         val startDateTextView: TextView = view.findViewById(R.id.startDateTextView)
         val favoriteIcon: ImageView = view.findViewById(R.id.favoriteIcon)
-
-        //  val cardView: CardView = view.findViewById(R.id.courseCardView)
         val courseImageView: ImageView = view.findViewById(R.id.courseImageView)
+        val detailsButton: LinearLayout = view.findViewById(R.id.detailsButton)
 
         fun bind(course: Course) {
             titleTextView.text = course.title
             descriptionTextView.text = course.text
-            priceTextView.text = "Цена: ${course.price}"
-            rateTextView.text = "Рейтинг: ${course.rate}"
-            startDateTextView.text = "Начало: ${course.startDate}"
+            priceTextView.text = "${course.price} ₽"
+            rateTextView.text = "${course.rate}"
+
+            val formattedDate = formatDate(course.startDate)
+            startDateTextView.text = formattedDate
+
+            favoriteIcon.setImageResource(R.drawable.ic_favorites_green)
             favoriteIcon.setColorFilter(Color.GREEN)
 
-            // Генерируем URL изображения на основе ID курса
+            // Генерируем URL изображения
             val imageUrl = "https://placeimg.com/800/400/tech?${course.id}"
 
             // Загружаем изображение с помощью Glide
@@ -47,6 +53,22 @@ class FavoritesAdapter(
             favoriteIcon.setOnClickListener {
                 onFavoriteToggle(course)
                 notifyItemRemoved(adapterPosition)
+            }
+
+            detailsButton.setOnClickListener {
+                // Обработка нажатия на кнопку "Подробнее"
+            }
+        }
+
+        private fun formatDate(dateString: String): String {
+            try {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = inputFormat.parse(dateString) ?: return dateString
+
+                val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru"))
+                return outputFormat.format(date)
+            } catch (e: Exception) {
+                return dateString
             }
         }
     }

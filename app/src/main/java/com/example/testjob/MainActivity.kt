@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private lateinit var fragmentContainer: FrameLayout
     private lateinit var appPreferences: AppPreferences
+
+    // Сохраняем состояние видимости элементов
+    private var lastSelectedItemId: Int = R.id.nav_home
 
     private val coursesAdapter by lazy {
         CoursesAdapter(mutableListOf(), ::toggleFavorite)
@@ -61,23 +65,31 @@ class MainActivity : AppCompatActivity() {
         // Устанавливаем layout
         setContentView(R.layout.activity_main)
 
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.dark_gray)
+
         // Инициализация базы данных
         database = CourseDatabase.getDatabase(this)
 
         // Инициализация views
         initViews()
 
-        // Показываем только строку состояния, скрываем навигационную панель
-        showStatusBarHideNavBar()
-
         if (savedInstanceState == null) {
             bottomNavigationView.selectedItemId = R.id.nav_home
+            lastSelectedItemId = R.id.nav_home
+        } else {
+            lastSelectedItemId = savedInstanceState.getInt("lastSelectedItemId", R.id.nav_home)
+            bottomNavigationView.selectedItemId = lastSelectedItemId
         }
 
         setupBottomNavigation()
         setupRecyclerView()
         setupListeners()
         fetchCourses()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("lastSelectedItemId", lastSelectedItemId)
     }
 
     override fun onDestroy() {
@@ -102,7 +114,6 @@ class MainActivity : AppCompatActivity() {
                             or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                             or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    // Убираем флаг SYSTEM_UI_FLAG_FULLSCREEN, чтобы показать строку состояния
                     )
         }
     }
@@ -111,6 +122,9 @@ class MainActivity : AppCompatActivity() {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
             showStatusBarHideNavBar()
+
+            // Убедимся, что нижнее меню всегда видимо
+            bottomNavigationView.visibility = View.VISIBLE
         }
     }
 
@@ -120,6 +134,12 @@ class MainActivity : AppCompatActivity() {
         sortButton = findViewById(R.id.sortButton)
         searchView = findViewById(R.id.searchEditText)
         fragmentContainer = findViewById(R.id.fragment_container)
+
+        // Применяем стиль к SearchView
+        searchView.setBackgroundResource(R.drawable.search_background)
+
+        // Убедимся, что нижнее меню всегда видимо
+        bottomNavigationView.visibility = View.VISIBLE
     }
 
     private fun setupRecyclerView() {
@@ -149,6 +169,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
+        // Убедимся, что нижнее меню всегда видимо
+        bottomNavigationView.visibility = View.VISIBLE
+
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
@@ -156,6 +179,7 @@ class MainActivity : AppCompatActivity() {
                     coursesRecyclerView.visibility = View.VISIBLE
                     searchView.visibility = View.VISIBLE
                     sortButton.visibility = View.VISIBLE
+                    lastSelectedItemId = R.id.nav_home
                     true
                 }
 
@@ -165,6 +189,7 @@ class MainActivity : AppCompatActivity() {
                     searchView.visibility = View.GONE
                     sortButton.visibility = View.GONE
                     showFavorites()
+                    lastSelectedItemId = R.id.nav_favorites
                     true
                 }
 
@@ -174,6 +199,7 @@ class MainActivity : AppCompatActivity() {
                     searchView.visibility = View.GONE
                     sortButton.visibility = View.GONE
                     showAccount()
+                    lastSelectedItemId = R.id.nav_account
                     true
                 }
 
@@ -297,6 +323,9 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, favoritesFragment)
             .commit()
+
+        // Убедимся, что нижнее меню всегда видимо
+        bottomNavigationView.visibility = View.VISIBLE
     }
 
     private fun showAccount() {
@@ -304,9 +333,19 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, accountFragment)
             .commit()
+
+        // Убедимся, что нижнее меню всегда видимо
+        bottomNavigationView.visibility = View.VISIBLE
+    }
+
+    // Метод для восстановления видимости элементов при возврате на экран
+    override fun onResume() {
+        super.onResume()
+
+        // Убедимся, что нижнее меню всегда видимо
+        bottomNavigationView.visibility = View.VISIBLE
     }
 }
-
 
 
 

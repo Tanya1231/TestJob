@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:enabled="false"
-        android:text="Вход" />
+        android:text="@string/entrance" />
 
 
     <LinearLayout
@@ -91,8 +91,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:text="Нет аккаунта? "
             android:lineHeight="15sp"
+            android:text="@string/no_account"
             android:textSize="12sp" />
 
         <TextView
@@ -101,10 +101,10 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:text="Регистрация"
             android:fontFamily="@font/roboto_bold"
-            android:textColor="@color/green"
             android:lineHeight="15sp"
+            android:text="@string/registration"
+            android:textColor="@color/green"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -113,54 +113,54 @@
         android:id="@+id/forgotPasswordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="25dp"
         android:clickable="true"
         android:focusable="true"
-        android:text="Забыл пароль"
+        android:fontFamily="@font/roboto_bold"
         android:lineHeight="15sp"
+        android:text="@string/forgot_my_password"
         android:textColor="@color/green"
-        android:textSize="12sp"
-        android:layout_marginBottom="25dp"/>
+        android:textSize="12sp" />
 
 
     <View
         android:layout_width="328dp"
         android:layout_height="1dp"
-        android:background="#4D555E"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:background="#4D555E" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/vkButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:contentDescription="ВКонтакте"
-            android:src="@drawable/ic_vk"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/vk"
+            android:src="@drawable/ic_vk" />
 
         <ImageButton
             android:id="@+id/okButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="Одноклассники"
-            android:src="@drawable/ic_ok"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/ok"
+            android:src="@drawable/ic_ok" />
     </LinearLayout>
 
     <View
         android:layout_width="108dp"
-        android:layout_marginTop="100dp"
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/divider_line" />
 
