@@ -1,17 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Theme.TestJob" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@color/dark</item>
         <item name="android:statusBarColor">@color/dark</item>
-        <item name="android:navigationBarColor">@color/dark</item>
         <item name="android:textColor">@color/smoky_white</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
-    </style>
-
-    <style name="Theme.TestJob.Fullscreen" parent="Theme.TestJob">
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimary">@color/dark</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <item name="colorAccent">@color/green</item>
+        <item name="colorSurface">@color/dark</item>
+        <item name="colorOnSurface">@color/smoky_white</item>
+        <item name="android:colorBackground">@color/dark</item>
+        <item name="android:navigationBarColor">@color/dark_gray</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
-
 </resources>
+

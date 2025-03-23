@@ -126,7 +126,6 @@ class LoginActivity : AppCompatActivity() {
             // Переход на главный экран
             goToMainActivity()
         }
-
         // Начальная проверка полей
         validateInput()
     }

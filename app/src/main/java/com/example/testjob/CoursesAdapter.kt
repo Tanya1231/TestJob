@@ -1,11 +1,17 @@
 package com.example.testjob
 
 import android.graphics.Color
-import android.util.Log
+import android.graphics.Shader
+import android.os.Build
+import android.graphics.RenderEffect
+import androidx.annotation.RequiresApi
+import java.text.SimpleDateFormat
+import java.util.Locale
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -25,18 +31,37 @@ class CoursesAdapter(
         val favoriteIcon: ImageView = view.findViewById(R.id.favoriteIcon)
         val cardView: CardView = view.findViewById(R.id.courseCardView)
         val courseImageView: ImageView = view.findViewById(R.id.courseImageView)
+        val detailsButton: LinearLayout = view.findViewById(R.id.detailsButton)
+        val ratingContainer: LinearLayout = view.findViewById(R.id.ratingContainer)
+        val dateContainer: LinearLayout = view.findViewById(R.id.dateContainer)
+        val favoriteContainer: LinearLayout = view.findViewById(R.id.favoriteContainer)
 
         fun bind(course: Course) {
             titleTextView.text = course.title
             descriptionTextView.text = course.text
-            priceTextView.text = "Цена: ${course.price}"
-            rateTextView.text = "Рейтинг: ${course.rate}"
-            startDateTextView.text = "Начало: ${course.startDate}"
+            priceTextView.text = "${course.price} ₽"
+            rateTextView.text = "${course.rate}"
+
+            val formattedDate = formatDate(course.startDate)
+            startDateTextView.text = formattedDate
 
             descriptionTextView.maxLines = 2
             descriptionTextView.ellipsize = android.text.TextUtils.TruncateAt.END
 
-            favoriteIcon.setColorFilter(if (course.hasLike) Color.GREEN else Color.GRAY)
+            if (course.hasLike) {
+                favoriteIcon.setImageResource(R.drawable.ic_favorites_green)
+                favoriteIcon.setColorFilter(Color.GREEN)
+            } else {
+                favoriteIcon.setImageResource(R.drawable.ic_favorite_small)
+                favoriteIcon.setColorFilter(Color.WHITE)
+            }
+
+            // Эффект размытия для Android 12+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                applyBlurEffect(ratingContainer)
+                applyBlurEffect(dateContainer)
+                applyBlurEffect(favoriteContainer)
+            }
 
             // Генерируем URL изображения на основе ID курса
             val imageUrl = "https://placeimg.com/800/400/tech?${course.id}"
@@ -56,8 +81,35 @@ class CoursesAdapter(
 
             cardView.setOnClickListener {
                 // Здесь можно добавить обработку нажатия на карточку курса
-                // Например, открытие детальной информации о курсе
             }
+
+            detailsButton.setOnClickListener {
+                // Обработка нажатия на кнопку "Подробнее"
+            }
+        }
+
+        // Функция для форматирования даты
+        private fun formatDate(dateString: String): String {
+            try {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = inputFormat.parse(dateString) ?: return dateString
+
+                val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru"))
+                return outputFormat.format(date)
+            } catch (e: Exception) {
+                return dateString
+            }
+        }
+
+        // Функция для применения эффекта размытия
+        @RequiresApi(Build.VERSION_CODES.S)
+        private fun applyBlurEffect(view: View) {
+            val blurEffect = RenderEffect.createBlurEffect(
+                16f, // радиус размытия
+                16f, // радиус размытия
+                Shader.TileMode.CLAMP
+            )
+            view.setRenderEffect(blurEffect)
         }
     }
 
